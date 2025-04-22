@@ -7,7 +7,8 @@ import requests
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///board.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///board.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Tjguddn98!@localhost:3306/flask-db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False    # SQLAlchemy에서 객체 변경 추적 기능을 비활성화
 
 db.init_app(app)
@@ -16,7 +17,6 @@ db.init_app(app)
 if not os.path.exists('board.db'):
     with app.app_context():
         db.create_all()
-        
 
 # VIEW
 
@@ -59,6 +59,7 @@ def detail(post_id):
         post = response.json()
     except requests.RequestException:
         post = []
+
     return render_template('detail.html', post=post)
 
 @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
@@ -113,7 +114,7 @@ def get_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.deleted_at:
         abort(404)  # 해당 에러 출력
-    return jsonify(post.to_dict())  # 저장된 게시글을 JSON으로 반환
+    return jsonify(post.to_dict())
 
 @app.route('/api/v1/posts', methods=['POST'])
 def create_post():
