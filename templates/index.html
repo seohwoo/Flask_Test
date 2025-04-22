@@ -5,10 +5,11 @@
 {% endblock %}
 {% block content %}
 <h1>게시글 목록</h1>
+<p><a href="/write">→ 글쓰기</a></p>
 {% if posts %}
 <ul>
     {% for post in posts %}
-    <li><strong>{{ post.title }}</strong>: {{ post.content }}</li>
+    <li><strong><a href="/{{post.id}}">{{ post.title }}</a></strong>: {{ post.content }}</li>
     {% endfor %}
 </ul>
 {% else %}

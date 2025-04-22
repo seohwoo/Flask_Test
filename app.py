@@ -16,6 +16,7 @@ db.init_app(app)
 if not os.path.exists('board.db'):
     with app.app_context():
         db.create_all()
+        
 
 # VIEW
 
@@ -43,18 +44,68 @@ def write():
                 'http://localhost:5000/api/v1/posts',
                 json={'title': title, 'content': content}
             )
-            response.raise_for_status() # 응답이 실패하면 예외를 발생시킴
+            response.raise_for_status() 
             return redirect(url_for('index'))
         except requests.RequestException:
             return render_template('write.html', error='게시글 등록 중 오류가 발생했습니다.')
 
     return render_template('write.html')
 
+@app.route('/<int:post_id>', methods=['GET'])
+def detail(post_id):
+    try:
+        response = requests.get(f'http://localhost:5000/api/v1/posts/{post_id}')
+        response.raise_for_status() 
+        post = response.json()
+    except requests.RequestException:
+        post = []
+    return render_template('detail.html', post=post)
+
+@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+def update(post_id):
+    try:
+        response = requests.get(f'http://localhost:5000/api/v1/posts/{post_id}')
+        response.raise_for_status() 
+        post = response.json() 
+    except requests.RequestException:
+        post = []
+    
+    if request.method == 'POST':
+        title = request.form.get('title')   
+        content = request.form.get('content')
+        if not title or not content:
+            return render_template('update.html', post = post, error='제목과 내용을 모두 입력하세요.')
+
+        try:
+            response = requests.put(
+                f'http://localhost:5000/api/v1/posts/{post_id}',
+                json={'title': title, 'content': content}
+            )
+            response.raise_for_status() 
+            return redirect(url_for('detail', post_id=post_id))
+        except requests.RequestException:
+            return render_template('update.html', post = post, error='게시글 수정 중 오류가 발생했습니다.')
+
+    return render_template('update.html', post = post)
+
+@app.route('/delete/<int:post_id>', methods=['GET', 'POST'])
+def delete(post_id): 
+    if request.method == 'POST':
+        try:
+            response = requests.delete(
+                f'http://localhost:5000/api/v1/posts/{post_id}')
+            response.raise_for_status() 
+            return redirect(url_for('index'))
+        except requests.RequestException:
+            return render_template('delete.html', id=post_id, error='게시글 삭제 중 오류가 발생했습니다.')
+
+    return render_template('delete.html', id=post_id)
+
 # API
 
 @app.route('/api/v1/posts', methods=['GET'])
 def get_posts():
-    posts = Post.query.filter_by(deleted_at=None).order_by(Post.id.desc()).all()
+    posts = Post.query.filter_by(deleted_at=None).order_by(Post.id.desc()).all()    # deleted_at이 없는 게시글 전체 출력
     return jsonify([post.to_dict() for post in posts])
 
 @app.route('/api/v1/posts/<int:post_id>', methods=['GET'])
