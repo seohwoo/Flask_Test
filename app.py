@@ -1,22 +1,23 @@
 from flask import Flask, request, jsonify, abort, render_template, redirect, url_for
 from models import db
+from config import Config
 from models.post import Post
 from datetime import datetime, timezone
-import os
+#import os
 import requests
 
 app = Flask(__name__)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///board.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Tjguddn98!@localhost:3306/flask-db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False    # SQLAlchemy에서 객체 변경 추적 기능을 비활성화
+app.config.from_object(Config)
 
 db.init_app(app)
 
 # DB 초기화 (최초 실행 시만 생성)
-if not os.path.exists('board.db'):
-    with app.app_context():
-        db.create_all()
+# if not os.path.exists('board.db'):
+#     with app.app_context():
+#         db.create_all()
+with app.app_context():
+    db.create_all()
 
 # VIEW
 
