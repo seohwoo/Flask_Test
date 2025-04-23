@@ -21,7 +21,7 @@ def create_post():
     data = request.get_json()   # 요청 본문에서 JSON 데이터 추출
     if not data or 'title' not in data or 'content' not in data:
         abort(400)
-    new_post = Post(title=data['title'], 
+    new_post = Post(title=data['title'],
                     content=data['content'], 
                     created_at=datetime.now(timezone.utc))
     db.session.add(new_post)    # 대상 객체를 세션에 추가
