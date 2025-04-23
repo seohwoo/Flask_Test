@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({ title, content }),
         })
         .then(res => {
-            if (!res.ok) throw new Error();
+            if (!res.ok) throw new Error(`[POST] /api/v1/posts/${postId} Fail`);
             return res.json();
         })
         .then(() => {
-            window.location.href = '/';  // 작성 성공 → 목록으로 이동
+            window.location.href = '/';
         })
         .catch(err => {
             console.error(err);

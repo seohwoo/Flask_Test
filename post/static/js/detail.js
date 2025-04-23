@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const postId = window.location.pathname.split('/').pop();
 
     fetch(`/api/v1/posts/${postId}`)
-        .then(res => { return res.json();})
+        .then(res => { 
+            if (!res.ok) throw new Error(`[GET] /api/v1/posts/${postId} Fail`);
+            return res.json();
+        })
         .then(post => {
             document.title = `게시글 ${post.id}`;
             document.getElementById('title').textContent = post.title;
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('update-link').href = `/update/${post.id}`;
             
             const deleteLink = document.getElementById('delete-link');
-            deleteLink.href = "#";  // 페이지 이동 막기
+            deleteLink.href = "#";  // 페이지 이동 방지
             deleteLink.addEventListener('click', (e) => {
                 e.preventDefault();  // 기본 링크 이동 방지
                 const confirmDelete = confirm("정말로 이 게시글을 삭제하시겠습니까?");
@@ -36,11 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'DELETE'
                 })
                 .then(res => {
-                    if (!res.ok) throw new Error();
+                    if (!res.ok) throw new Error(`[DELETE] /api/v1/posts/${postId} Fail`);
                     return res.json();
                 })
-                .then(() => {
-                    window.location.href = '/';  // 메인으로 이동
+                .then(() => {//요청 정상 처리
+                    window.location.href = '/';
                 })
                 .catch(err => {
                     console.error(err);

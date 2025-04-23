@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/v1/posts')
-        .then(res => res.json())
+        .then(res => { 
+            if (!res.ok) throw new Error(`[GET] /api/v1/posts Fail`);
+            return res.json();
+        })
         .then(posts => {
             const list = document.getElementById('post-list');
             const noPostsMessage = document.getElementById('no-posts-message');
@@ -13,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             posts.forEach(post => {
                 const li = document.createElement('li');
-                
                 const link = document.createElement('a');
+                
                 link.href = `/${post.id}`;
                 link.textContent = post.title;
 
