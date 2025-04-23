@@ -9,10 +9,11 @@
 </head>
 
 <body>
-  <div id="content">{% block content %}{% endblock %}</div>
+  <div>{% block content %}{% endblock %}</div>
   <div id="footer">
     {% block footer %}&copy; Copyright 2025 by <a href="https://github.com/seohwoo/Flask_Test">seohwoo</a>.{% endblock%}
   </div>
+  {% block scripts %}{% endblock %}
 </body>
 
 </html>

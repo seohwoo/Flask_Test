@@ -4,12 +4,15 @@
 {{ super() }}
 {% endblock %}
 {% block content %}
-{% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
-<form method="POST">
+<p id="error-message" style="color: red;"></p>
+<form id="post-form">
     <p>제목: <input type="text" name="title"></p>
     <p>내용:</p>
     <p><textarea name="content" rows="5" cols="40"></textarea></p>
     <button type="submit">등록</button>
 </form>
 <p><a href="/">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('post_view.static', filename='js/write.js') }}"></script>
 {% endblock %}

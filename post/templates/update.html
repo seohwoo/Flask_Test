@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<p id="error-message" style="color: red;"></p>
+<form id="update-form">
+    <p>제목: <input type="text" name="title" id="title"></p>
+    <p>내용:</p>
+    <p><textarea name="content" id="content" rows="5" cols="40"></textarea></p>
+    <button type="submit">등록</button>
+</form>
+<p><a href="/">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('post_view.static', filename='js/update.js') }}"></script>
+{% endblock %}

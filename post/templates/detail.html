@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1 id="title"></h1>
+<p>내용:</p>
+<p id="content"></p>
+<p>생성날짜: <span id="created_at"></span></p>
+<p>수정날짜: <span id="updated_at"></span></p>
+<p><a id="update-link">📝수정</a></p>
+<p><a id="delete-link">❌삭제</a></p>
+<p><a href="/">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('post_view.static', filename='js/detail.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1>게시글 목록</h1>
+<p><a href="/write">→ 글쓰기</a></p>
+<ul id="post-list"></ul>
+<p id="no-posts-message" style="color: gray; display: none;">게시글이 없습니다.</p>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('post_view.static', filename='js/index.js') }}"></script>
+{% endblock %}
