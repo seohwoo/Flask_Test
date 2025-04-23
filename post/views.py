@@ -23,7 +23,3 @@ def detail(post_id):
 @post_view.route('/update/<int:post_id>')
 def update(post_id):
     return render_template('update.html')
-
-@post_view.route('/delete/<int:post_id>')
-def delete(post_id): 
-    return render_template('delete.html')
