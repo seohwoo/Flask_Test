@@ -3,18 +3,18 @@
 3. delete 상태 값으로 관리
 4. 공지 게시판(관리자만 작성)
 
-User : id, username, password, auth_id
-auth : id, auth_id, auth_name
+User : id, username, password, auth_id, created_at, updated_at
+auth : id, name
 post : id, writer, title, content, created_at, updated_at, status_id, readcnt
-comment : id, post_id, writer, content, created_at, updated_at, status_id, readcnt
-status : id, status_id, status_name
+comment : id, post_id, writer, content, created_at, updated_at, status_id
+status : id, name
 
 status
-0 : 삭제
-1 : 공지
-2 : 개인
+1 : 삭제
+2 : 공지
+3 : 개인
 
 auth
-0 : 관리자
-1 : 사용자
+1 : 관리자
+2 : 사용자
 
