@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Notice{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% include "login-btn.html" %}
+{% block content %}
+<h1>공지 게시판</h1>
+<p><a href="/notice/write">→ 글쓰기</a></p>
+{% if posts %}
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>조회수</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td><a href="/notice/{{ post.id }}">{{ post.title }}</a></td>
+            <td>{{ post.author }}</td>
+            <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
+            <td>{{ post.readcnt }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>게시글이 없습니다.</p>
+{% endif %}
+<p><a href="/">← 메인으로</a></p>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

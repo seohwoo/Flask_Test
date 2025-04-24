@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% include "login-btn.html" %}
+{% block content %}
+<h1>게시판 목록</h1>
+<p><a href="/notice">→ 공지 게시판</a></p>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

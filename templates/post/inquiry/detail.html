@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Inquiry Detail{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% include "login-btn.html" %}
+{% block content %}
+<h1>{{post.title}}</h1>
+<p>작성자 : {{post.author}}</p>
+<p>내용 : </p>
+<p>{{post.content}}</p>
+<p>생성날짜 : {{post.created_at}}</p>
+<p>수정날짜 : {{post.updated_at}}</p>
+<p><a href="/inquiry/update/{{post.id}}">📝수정</a></p>
+<p><a href="/inquiry/delete/{{post.id}}">❌삭제</a></p>
+<p><a href="/inquiry">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

@@ -1,5 +1,10 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from app import app
-from models import db, Status, Auth
+from models import db, Status, Auth, User
 
 with app.app_context():
     if not Status.query.first():
@@ -16,5 +21,11 @@ with app.app_context():
             Auth(name='사용자'),
         ]
         db.session.add_all(auths)
+        
+    if not User.query.first():
+        users = [
+            User(username='admin', password='admin', auth_id=1)
+        ]
+        db.session.add_all(users)
 
     db.session.commit()

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Notice Delete{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h1>정말로 삭제하시겠습니까?</h1>
+<form method="POST">
+    <button type="submit">삭제</button>
+</form>
+<p><a href="/notice">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

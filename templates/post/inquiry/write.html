@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Inquiry Write{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% include "login-btn.html" %}
+{% block content %}
+{% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+<form method="POST">
+    <p>제목: <input type="text" name="title"></p>
+    <p>내용:</p>
+    <p><textarea name="content" rows="5" cols="40"></textarea></p>
+    <button type="submit">등록</button>
+</form>
+<p><a href="/inquiry">← 목록으로</a></p>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

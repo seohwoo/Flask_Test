@@ -3,11 +3,13 @@ from config import Config
 from views import blueprints
 from flask_migrate import Migrate
 from models import db, User, Post, Comment, Auth, Status
+from auth import init_login
 
 app = Flask("__name__")
 app.config.from_object(Config)
 
 db.init_app(app)
+init_login(app)
 
 migrate = Migrate(app, db)
 
