@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Inquiry Detail{% endblock %}
+{% block title %}Notice Detail{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
@@ -11,8 +11,25 @@
 <p>{{post.content}}</p>
 <p>생성날짜 : {{post.created_at}}</p>
 <p>수정날짜 : {{post.updated_at}}</p>
+<p></p>
+{% if comments %}
+<hr />
+{% for comment in comments %}
+<p><strong>{{comment.author}}</strong> : {{comment.content}}
+    {% if comment.author == username%}
+    <a href="/inquiry/delete/comment/{{comment.id}}">❌</a>
+    {% endif %}
+</p>
+{% endfor %}
+{% endif %}
+<hr />
+{% if post.author == username or is_admin %}
+<p><a href="/inquiry/comment/{{post.id}}">⌨댓글</a></p>
+{% endif %}
+{% if post.author == username%}
 <p><a href="/inquiry/update/{{post.id}}">📝수정</a></p>
 <p><a href="/inquiry/delete/{{post.id}}">❌삭제</a></p>
+{% endif %}
 <p><a href="/inquiry">← 목록으로</a></p>
 {% endblock %}
 {% block scripts %}

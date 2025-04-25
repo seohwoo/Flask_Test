@@ -10,9 +10,9 @@ comment : id, post_id, writer, content, created_at, updated_at, status_id
 status : id, name
 
 status
-1 : 삭제
+1 : 문의
 2 : 공지
-3 : 개인
+3 : 삭제
 
 auth
 1 : 관리자

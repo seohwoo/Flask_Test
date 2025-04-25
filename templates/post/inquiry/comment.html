@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Notice Write{% endblock %}
+{% block title %}Notice Comment{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
@@ -7,12 +7,11 @@
 {% block content %}
 {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
 <form method="POST">
-    <p>제목: <input type="text" name="title"></p>
-    <p>내용:</p>
-    <p><textarea name="content" rows="5" cols="40"></textarea></p>
+    <p>{{username}}</p>
+    <p><textarea name="content" rows="5" cols="40" placeholder="댓글을 입력해 주세요."></textarea></p>
     <button type="submit">등록</button>
 </form>
-<p><a href="/inquiry">← 목록으로</a></p>
+<p><a href="/inquiry/{{post_id}}">← 뒤로가기</a></p>
 {% endblock %}
 {% block scripts %}
 {% endblock %}

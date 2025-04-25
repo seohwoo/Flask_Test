@@ -6,7 +6,9 @@
 {% include "login-btn.html" %}
 {% block content %}
 <h1>공지 게시판</h1>
+{% if is_admin %}
 <p><a href="/notice/write">→ 글쓰기</a></p>
+{% endif %}
 {% if posts %}
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>

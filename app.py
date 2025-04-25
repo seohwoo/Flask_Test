@@ -1,8 +1,8 @@
-from flask import Flask, render_template, Blueprint
+from flask import Flask
 from config import Config
 from views import blueprints
 from flask_migrate import Migrate
-from models import db, User, Post, Comment, Auth, Status
+from models import db
 from auth import init_login
 
 app = Flask("__name__")

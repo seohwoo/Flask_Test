@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Inquiry Delete{% endblock %}
+{% block title %}Notice Delete{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
@@ -8,7 +8,7 @@
 <form method="POST">
     <button type="submit">삭제</button>
 </form>
-<p><a href="/inquiry">← 목록으로</a></p>
+<p><a href="/inquiry/{{post_id}}">← 뒤로가기</a></p>
 {% endblock %}
 {% block scripts %}
 {% endblock %}

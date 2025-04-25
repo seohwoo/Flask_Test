@@ -11,8 +11,23 @@
 <p>{{post.content}}</p>
 <p>생성날짜 : {{post.created_at}}</p>
 <p>수정날짜 : {{post.updated_at}}</p>
+<p></p>
+{% if comments %}
+<hr />
+{% for comment in comments %}
+<p><strong>{{comment.author}}</strong> : {{comment.content}}
+    {% if comment.author == username%}
+    <a href="/notice/delete/comment/{{comment.id}}?post_id={{post.id}}">❌</a>
+    {% endif %}
+</p>
+{% endfor %}
+{% endif %}
+<hr />
+<p><a href="/notice/comment/{{post.id}}">⌨댓글</a></p>
+{% if is_admin %}
 <p><a href="/notice/update/{{post.id}}">📝수정</a></p>
 <p><a href="/notice/delete/{{post.id}}">❌삭제</a></p>
+{% endif %}
 <p><a href="/notice">← 목록으로</a></p>
 {% endblock %}
 {% block scripts %}
