@@ -5,8 +5,8 @@
 
 User : id, username, password, auth_id, created_at, updated_at
 auth : id, name
-post : id, writer, title, content, created_at, updated_at, status_id, readcnt
-comment : id, post_id, writer, content, created_at, updated_at, status_id
+post : id, user_id, title, content, created_at, updated_at, status_id, readcnt
+comment : id, post_id, user_id, content, created_at, updated_at, status_id
 status : id, name
 
 status

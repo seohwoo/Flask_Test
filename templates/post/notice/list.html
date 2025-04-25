@@ -6,7 +6,7 @@
 {% include "login-btn.html" %}
 {% block content %}
 <h1>공지 게시판</h1>
-{% if is_admin %}
+{% if user and user.is_admin() %}
 <p><a href="/notice/write">→ 글쓰기</a></p>
 {% endif %}
 {% if posts %}
@@ -25,7 +25,7 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td><a href="/notice/{{ post.id }}">{{ post.title }}</a></td>
-            <td>{{ post.author }}</td>
+            <td>{{ post.users.username }}</td>
             <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
             <td>{{ post.readcnt }}</td>
         </tr>

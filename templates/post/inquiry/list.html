@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}inquiry{% endblock %}
+{% block title %}Inquiry{% endblock %}
 {% block head %}
 {{ super() }}
 {% endblock %}
@@ -23,7 +23,7 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td><a href="/inquiry/{{ post.id }}">{{ post.title }}</a></td>
-            <td>{{ post.author }}</td>
+            <td>{{ post.users.username }}</td>
             <td>{{ post.created_at.strftime('%Y-%m-%d') }}</td>
             <td>{{ post.readcnt }}</td>
         </tr>

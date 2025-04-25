@@ -6,17 +6,17 @@
 {% include "login-btn.html" %}
 {% block content %}
 <h1>{{post.title}}</h1>
-<p>작성자 : {{post.author}}</p>
+<p>작성자 : {{post.users.username}}</p>
 <p>내용 : </p>
 <p>{{post.content}}</p>
 <p>생성날짜 : {{post.created_at}}</p>
-<p>수정날짜 : {{post.updated_at}}</p>
+<p>수정날짜 : {{post.updated_at or ""}}</p>
 <p></p>
 {% if comments %}
 <hr />
 {% for comment in comments %}
-<p><strong>{{comment.author}}</strong> : {{comment.content}}
-    {% if comment.author == username%}
+<p><strong>{{comment.users.username}}</strong> : {{comment.content}}
+    {% if comment.users.id == user.id%}
     <a href="/notice/delete/comment/{{comment.id}}?post_id={{post.id}}">❌</a>
     {% endif %}
 </p>
@@ -24,7 +24,7 @@
 {% endif %}
 <hr />
 <p><a href="/notice/comment/{{post.id}}">⌨댓글</a></p>
-{% if is_admin %}
+{% if user and user.is_admin() %}
 <p><a href="/notice/update/{{post.id}}">📝수정</a></p>
 <p><a href="/notice/delete/{{post.id}}">❌삭제</a></p>
 {% endif %}

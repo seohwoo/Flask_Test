@@ -1,4 +1,5 @@
 from . import db
+from .auth import Auth
 from flask_login import UserMixin
 from datetime import datetime, timezone
 
@@ -12,5 +13,8 @@ class User(UserMixin, db.Model):
     updated_at = db.Column(db.DateTime, nullable=True)
     
     auth = db.relationship('Auth', back_populates='users')
-    posts = db.relationship('Post', back_populates='writer')
-    comments = db.relationship('Comment', back_populates='writer')
+    posts = db.relationship('Post', back_populates='users')
+    comments = db.relationship('Comment', back_populates='users')
+    
+    def is_admin(self):
+        return self.auth_id == Auth.query.filter_by(name="관리자").first().id

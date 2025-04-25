@@ -7,7 +7,7 @@
 {% block content %}
 {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
 <form method="POST">
-    <p>{{username}}</p>
+    <p>{{user.username}}</p>
     <p><textarea name="content" rows="5" cols="40" placeholder="댓글을 입력해 주세요."></textarea></p>
     <button type="submit">등록</button>
 </form>

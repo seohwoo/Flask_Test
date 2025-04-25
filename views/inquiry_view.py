@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from models import *
 from flask_login import login_required, current_user
 from datetime import datetime, timezone
+from auth import author_required, author_or_admin_required
 
 inquiry_view = Blueprint(
     "inquiry_view",
@@ -13,7 +14,7 @@ inquiry_view = Blueprint(
 
 # Inquiry
 
-@inquiry_view.route("/inquiry", methods=['GET'])
+@inquiry_view.route("/", methods=['GET'])
 def inquiry():
     
     status = Status.query.filter_by(name="문의").first()
@@ -21,7 +22,7 @@ def inquiry():
     
     return render_template("inquiry/list.html", posts=posts)
 
-@inquiry_view.route("/inquiry/write", methods=['GET', 'POST'])
+@inquiry_view.route("/write", methods=['GET', 'POST'])
 @login_required
 def inquiry_wirte():
     
@@ -34,46 +35,31 @@ def inquiry_wirte():
             error='제목과 내용을 모두 입력하세요.'
         else:
             status = Status.query.filter_by(name="문의").first()
-            user = User.query.filter_by(id=current_user.id).first()
-            new_post = Post(author=user.username, title=title, content=content, status_id=status.id)
+            new_post = Post(user_id = current_user.id, title=title, content=content, status_id=status.id)
             db.session.add(new_post)
             db.session.commit()
             return redirect(url_for("inquiry_view.inquiry"))
     
     return render_template("inquiry/write.html", error=error)
 
-@inquiry_view.route("/inquiry/<int:post_id>", methods=['GET'])
-@login_required
+@inquiry_view.route("/<int:post_id>", methods=['GET'])
+@author_or_admin_required
 def inquiry_detail(post_id):
     
     post = Post.query.filter_by(id=post_id).first()
-    user = User.query.filter_by(id=current_user.id).first()
-    
-    is_admin = user.id == Auth.query.filter_by(name="관리자").first().id
-    username = user.username
-    
-    if not (is_admin or post.author == user.username):
-        return redirect(url_for("inquiry_view.inquiry"))
-    
-    comments = Comment.query.filter_by(post_id=post_id, status_id = post.status_id).order_by(Comment.created_at.asc()).all()
+    comments = Comment.query.filter_by(post_id=post_id, status_id = post.status_id).order_by(Comment.created_at.desc()).all()
     post.readcnt += 1
     db.session.commit()
     
-    return render_template("inquiry/detail.html", post=post, comments=comments, username=username, is_admin=is_admin)
+    return render_template("inquiry/detail.html", post=post, comments=comments, user=current_user)
 
-@inquiry_view.route("/inquiry/update/<int:post_id>", methods=['GET', 'POST'])
-@login_required
+@inquiry_view.route("/update/<int:post_id>", methods=['GET', 'POST'])
+@author_required
 def inquiry_update(post_id):
     
     error = None
     
-    user = User.query.filter_by(id=current_user.id).first()
     post = Post.query.filter_by(id=post_id).first()
-    
-    is_author = user.username == post.author
-    
-    if not is_author:
-        return redirect(url_for("inquiry_view.inquiry_detail", post_id=post_id))
     
     if request.method == 'POST':
         title = request.form.get('title')
@@ -89,15 +75,11 @@ def inquiry_update(post_id):
     
     return render_template("inquiry/update.html", error=error, post=post)
 
-@inquiry_view.route("/inquiry/delete/<int:post_id>", methods=['GET', 'POST'])
-@login_required
+@inquiry_view.route("/delete/<int:post_id>", methods=['GET', 'POST'])
+@author_required
 def inquiry_delete(post_id):
     
-    user = User.query.filter_by(id=current_user.id).first()   
     post = Post.query.filter_by(id=post_id).first()
-    
-    if user.username != post.author:
-        return redirect(url_for("inquiry_view.inquiry_detail", post_id=post_id))
     
     if request.method == 'POST':
         status = Status.query.filter_by(name="삭제").first()
@@ -112,19 +94,13 @@ def inquiry_delete(post_id):
         
     return render_template("inquiry/delete.html", post_id=post_id)
 
-@inquiry_view.route("/inquiry/comment/<int:post_id>", methods=['GET', 'POST'])
-@login_required
+@inquiry_view.route("/comment/<int:post_id>", methods=['GET', 'POST'])
+@author_or_admin_required
 def inquiry_comment(post_id):
     
     error = None
     
-    user = User.query.filter_by(id=current_user.id).first()
-    post = Post.query.filter_by(id=post_id).first()
-    
-    is_admin = user.id == Auth.query.filter_by(name="관리자").first().id
-    
-    if not (is_admin or user.username == post.author):
-        return redirect(url_for("inquiry_view.inquiry_detail", post_id=post_id))
+    user = current_user if current_user.is_authenticated else None
     
     if request.method == 'POST':
         content = request.form.get('content')
@@ -132,29 +108,24 @@ def inquiry_comment(post_id):
             error='내용을 입력하세요.'
         else:
             status = Status.query.filter_by(name="문의").first()
-            new_comment =  Comment(author=user.username, post_id=post_id, content=content, status_id=status.id)
+            new_comment =  Comment(user_id=current_user.id, post_id=post_id, content=content, status_id=status.id)
             db.session.add(new_comment)
             db.session.commit()
             return redirect(url_for("inquiry_view.inquiry_detail", post_id=post_id))
         
-    return render_template("inquiry/comment.html", post_id=post_id, username = user.username, error=error)
+    return render_template("inquiry/comment.html", post_id=post_id, user=user, error=error)
 
-@inquiry_view.route("/inquiry/delete/comment/<int:comment_id>", methods=['GET', 'POST'])
-@login_required
+@inquiry_view.route("/delete/comment/<int:comment_id>", methods=['GET', 'POST'])
+@author_or_admin_required
 def inquiry_comment_delete(comment_id):
     
-    user = User.query.filter_by(id=current_user.id).first()
     comment = Comment.query.filter_by(id=comment_id).first()
-    post = Post.query.filter_by(id=comment.post_id).first()
-    
-    if user.username != comment.author:
-        return redirect(url_for("inquiry_view.inquiry_detail", post_id = post.id))
     
     if request.method == 'POST':
         status = Status.query.filter_by(name="삭제").first()
         comment.status_id = status.id
         db.session.commit()
-        return redirect(url_for("inquiry_view.inquiry_detail", post_id = post.id))
+        return redirect(url_for("inquiry_view.inquiry_detail", post_id = comment.post_id))
     
-    return render_template("inquiry/delete.html", post_id = post.id)
+    return render_template("inquiry/delete.html", post_id = comment.post_id)
 
