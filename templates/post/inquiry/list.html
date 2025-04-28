@@ -7,7 +7,7 @@
 {% block content %}
 <h1>문의 게시판</h1>
 <p><a href="/inquiry/write">→ 글쓰기</a></p>
-{% if posts %}
+{% if posts.items %}
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
         <tr>
@@ -19,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for post in posts %}
+        {% for post in posts.items %}
         <tr>
             <td>{{ loop.index }}</td>
             <td><a href="/inquiry/{{ post.id }}">{{ post.title }}</a></td>
@@ -30,6 +30,10 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% set pagination = posts %}
+{% set endpoint = 'inquiry_view.inquiry' %}
+{% include 'paging.html'%}
 {% else %}
 <p>게시글이 없습니다.</p>
 {% endif %}

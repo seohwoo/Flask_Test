@@ -9,7 +9,7 @@
 {% if user and user.is_admin() %}
 <p><a href="/notice/write">→ 글쓰기</a></p>
 {% endif %}
-{% if posts %}
+{% if posts.items %}
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
         <tr>
@@ -21,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for post in posts %}
+        {% for post in posts.items %}
         <tr>
             <td>{{ loop.index }}</td>
             <td><a href="/notice/{{ post.id }}">{{ post.title }}</a></td>
@@ -32,6 +32,9 @@
         {% endfor %}
     </tbody>
 </table>
+{% set pagination = posts %}
+{% set endpoint = 'notice_view.notice' %}
+{% include 'paging.html'%}
 {% else %}
 <p>게시글이 없습니다.</p>
 {% endif %}

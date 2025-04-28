@@ -12,15 +12,19 @@
 <p>생성날짜 : {{post.created_at}}</p>
 <p>수정날짜 : {{post.updated_at or ""}}</p>
 <p></p>
-{% if comments %}
+{% if comments.items %}
 <hr />
-{% for comment in comments %}
+{% for comment in comments.items %}
 <p><strong>{{comment.users.username}}</strong> : {{comment.content}}
     {% if comment.users.id == user.id%}
     <a href="/notice/delete/comment/{{comment.id}}?post_id={{post.id}}">❌</a>
     {% endif %}
 </p>
 {% endfor %}
+{% set pagination = comments %}
+{% set endpoint = 'notice_view.notice_detail' %}
+{% set post_id = post.id %}
+{% include 'paging.html'%}
 {% endif %}
 <hr />
 <p><a href="/notice/comment/{{post.id}}">⌨댓글</a></p>

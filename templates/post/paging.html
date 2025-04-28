@@ -1,0 +1,43 @@
+<div>
+
+    {% if pagination.has_prev %}
+    <a href="{% if post_id is defined %}
+                     {{ url_for(endpoint, post_id=post_id, page=pagination.prev_num) }}
+                 {% else %}
+                     {{ url_for(endpoint, page=pagination.prev_num) }}
+                 {% endif %}">
+        이전
+    </a>
+    {% endif %}
+
+    {% set start_page = (pagination.page - 1) // 10 * 10 + 1 %}
+    {% set end_page = start_page + 9 %}
+    {% if end_page > pagination.pages %}
+    {% set end_page = pagination.pages %}
+    {% endif %}
+
+    {% for p in range(start_page, end_page + 1) %}
+    {% if p == pagination.page %}
+    <strong>{{ p }}</strong>
+    {% else %}
+    <a href="{% if post_id is defined %}
+                         {{ url_for(endpoint, post_id=post_id, page=p) }}
+                     {% else %}
+                         {{ url_for(endpoint, page=p) }}
+                     {% endif %}">
+        {{ p }}
+    </a>
+    {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    <a href="{% if post_id is defined %}
+                     {{ url_for(endpoint, post_id=post_id, page=pagination.next_num) }}
+                 {% else %}
+                     {{ url_for(endpoint, page=pagination.next_num) }}
+                 {% endif %}">
+        다음
+    </a>
+    {% endif %}
+
+</div>
