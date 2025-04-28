@@ -67,8 +67,7 @@ def inquiry_detail(post_id):
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     
-    stmt = db.select(Post).where(Post.id==post_id)
-    post = db.session.execute(stmt).scalars().first()
+    post = db.session.get(Post, post_id)
     
     stmt = db.select(Comment).where(Comment.post_id==post_id, Comment.status_id==post.status_id).order_by(Comment.created_at.desc())
     comments = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
@@ -84,8 +83,7 @@ def inquiry_update(post_id):
     
     error = None
     
-    stmt = db.select(Post).where(Post.id==post_id)
-    post = db.session.execute(stmt).scalars().first()
+    post = db.session.get(Post, post_id)
     
     if request.method == 'POST':
         title = request.form.get('title')
@@ -105,14 +103,12 @@ def inquiry_update(post_id):
 @author_required
 def inquiry_delete(post_id):
     
-    stmt = db.select(Post).where(Post.id==post_id)
-    post = db.session.execute(stmt).scalars().first()
-    
     if request.method == 'POST':
         
         stmt = db.select(Status).where(Status.name=="삭제")
         status = db.session.execute(stmt).scalars().first()
         
+        post = db.session.get(Post, post_id)
         post.status_id = status.id
         
         stmt = db.select(Comment).where(Comment.post_id==post_id)
@@ -162,8 +158,7 @@ def inquiry_comment_delete(comment_id):
         stmt = db.select(Status).where(Status.name=="삭제")
         status = db.session.execute(stmt).scalars().first()
         
-        stmt = db.select(Comment).where(Comment.id == comment_id)
-        comment = db.session.execute(stmt).scalars().first()
+        comment = db.session.get(Comment, comment_id)
         
         comment.status_id = status.id
         db.session.commit()

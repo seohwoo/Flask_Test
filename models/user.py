@@ -17,4 +17,6 @@ class User(UserMixin, db.Model):
     comments = db.relationship('Comment', back_populates='users')
     
     def is_admin(self):
-        return self.auth_id == Auth.query.filter_by(name="관리자").first().id
+        stmt = db.select(Auth).where(Auth.name=="관리자")
+        auth_id = db.session.execute(stmt).scalars().first().id
+        return self.auth_id == auth_id

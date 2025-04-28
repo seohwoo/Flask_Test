@@ -19,7 +19,7 @@ notice_view = Blueprint(
 def notice():
     
     page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
     keyword = request.args.get('keyword', '', type=str)
     search_type = request.args.get('type', 'title', type=str)
     
@@ -52,12 +52,14 @@ def notice_wirte():
         if not title or not content:
             error='제목과 내용을 모두 입력하세요.'
         else:
-            
             stmt = db.select(Status).where(Status.name == "공지")
             status = db.session.execute(stmt).scalars().first()
+            
             new_post = Post(user_id=current_user.id, title=title, content=content, status_id=status.id)
+            
             db.session.add(new_post)
             db.session.commit()
+            
             return redirect(url_for("notice_view.notice"))
     
     return render_template("notice/write.html", error=error)
@@ -69,8 +71,7 @@ def notice_detail(post_id):
     per_page = request.args.get('per_page', 10, type=int)
     user = current_user if current_user.is_authenticated else None
     
-    stmt = db.select(Post).where(Post.id == post_id)
-    post = db.session.execute(stmt).scalars().first()
+    post = db.session.get(Post, post_id)
     
     stmt = db.select(Comment).where(Comment.post_id==post_id, Comment.status_id==post.status_id).order_by(Comment.created_at.desc())
     comments = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
@@ -86,8 +87,7 @@ def notice_update(post_id):
     
     error = None
     
-    stmt = db.select(Post).where(Post.id==post_id)
-    post = db.session.execute(stmt).scalars().first()
+    post = db.session.get(Post, post_id)
     
     if request.method == 'POST':
         title = request.form.get('title')
@@ -109,16 +109,15 @@ def notice_delete(post_id):
         
     if request.method == 'POST':
         
-        stmt = db.select(Post).where(Post.id == post_id)
-        post = db.session.execute(stmt).scalars().first()
-        
         stmt = db.select(Status).where(Status.name == "삭제")
         status = db.session.execute(stmt).scalars().first()
         
+        post = db.session.get(Post, post_id)
         post.status_id = status.id
         
         stmt = db.select(Comment).where(Comment.post_id==post_id)
         comments = db.session.execute(stmt).scalars().all()
+        
         for comment in comments:
             comment.status_id = status.id
         
@@ -142,9 +141,12 @@ def notice_comment(post_id):
         else:
             stmt = db.select(Status).where(Status.name == "공지")
             status = db.session.execute(stmt).scalars().first()
+            
             new_comment =  Comment(user_id=current_user.id, post_id=post_id, content=content, status_id=status.id)
+            
             db.session.add(new_comment)
             db.session.commit()
+            
             return redirect(url_for("notice_view.notice_detail", post_id=post_id))
         
     return render_template("notice/comment.html", user=user, post_id=post_id, error=error)
@@ -160,8 +162,7 @@ def notice_comment_delete(comment_id):
         stmt = db.select(Status).where(Status.name=="삭제")
         status = db.session.execute(stmt).scalars().first()
         
-        stmt = db.select(Comment).where(Comment.id==comment_id)
-        comment = db.session.execute(stmt).scalars().first()
+        comment = db.session.get(Comment, comment_id)
         
         comment.status_id = status.id
         db.session.commit()

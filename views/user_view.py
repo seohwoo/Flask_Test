@@ -63,7 +63,9 @@ def reqister():
             
             db.session.add(new_user)
             db.session.commit()
+            
             login_user(new_user)
+            
             return redirect(url_for("index_view.index"))
         
     return render_template("register.html", error=error)
