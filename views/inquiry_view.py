@@ -19,11 +19,20 @@ def inquiry():
     
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
+    keyword = request.args.get('keyword', '', type=str)
+    search_type = request.args.get('type', 'title', type=str)
     
     stmt = db.select(Status).where(Status.name=="문의")
     status = db.session.execute(stmt).scalars().first()
     
-    stmt = db.select(Post).where(Post.status_id==status.id).order_by(Post.created_at.desc())
+    stmt = db.select(Post).where(Post.status_id == status.id).order_by(Post.created_at.desc())
+    
+    if keyword:
+        if search_type == 'title':
+            stmt = stmt.where(Post.title.contains(keyword))
+        elif search_type == 'author':
+            stmt = stmt.where(Post.users.has(User.username.contains(keyword)))
+    
     posts = db.paginate(stmt, page=page, per_page=per_page, error_out=False)
     
     return render_template("inquiry/list.html", posts=posts)

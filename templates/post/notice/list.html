@@ -9,6 +9,9 @@
 {% if user and user.is_admin() %}
 <p><a href="/notice/write">→ 글쓰기</a></p>
 {% endif %}
+{% set pagination = posts %}
+{% set endpoint = 'notice_view.notice' %}
+{% include 'searching.html' %}
 {% if posts.items %}
 <table border="1" cellpadding="8" cellspacing="0">
     <thead>
@@ -32,8 +35,6 @@
         {% endfor %}
     </tbody>
 </table>
-{% set pagination = posts %}
-{% set endpoint = 'notice_view.notice' %}
 {% include 'paging.html'%}
 {% else %}
 <p>게시글이 없습니다.</p>

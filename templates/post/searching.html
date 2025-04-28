@@ -1,0 +1,8 @@
+<form method="get" action="{{ url_for(endpoint) }}">
+    <select name="type">
+        <option value="title" {% if search_type=='title' %}selected{% endif %}>제목</option>
+        <option value="author" {% if search_type=='author' %}selected{% endif %}>작성자</option>
+    </select>
+    <input type="text" name="keyword" value="{{ keyword }}" placeholder="검색어를 입력하세요">
+    <button type="submit">검색</button>
+</form>

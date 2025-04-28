@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, render_template, url_for, request
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, Auth, db
 
 user_view = Blueprint(
@@ -16,11 +17,13 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
+        
+        stmt = db.select(User).where(User.username==username)
+        user = db.session.execute(stmt).scalars().first()
 
         if not username or not password:
             error='아이디와 비밀번호를 모두 입력하세요.'
-        elif user and user.password == password:
+        elif user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for("index_view.index"))
         else:
@@ -43,15 +46,21 @@ def reqister():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
+        
+        stmt = db.select(User).where(User.username==username)
+        user = db.session.execute(stmt).scalars().first()
         
         if not username or not password:
             error='아이디와 비밀번호를 모두 입력하세요.'
         elif user:
             error = "이미 사용중인 아이디입니다."
         else:
-            auth = Auth.query.filter_by(name="사용자").first()
+            stmt = db.select(Auth).where(Auth.name=="사용자")
+            auth = db.session.execute(stmt).scalars().first()
+            
+            password = generate_password_hash(password)
             new_user = User(username=username, password=password, auth_id=auth.id)
+            
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user)
