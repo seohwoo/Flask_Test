@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>음원정보 | 음원-권리정보 통합 서비스</title>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="/static/plugins/fontawesome/all.min.css ">
+<!-- icheck bootstrap -->
+<link rel="stylesheet" href="/static/dist/css/icheck-bootstrap.min.css">
+
+<!-- Select2 -->
+<link rel="stylesheet" href="/static/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/static/plugins/tagsinput/css/bootstrap-tagsinput.css">
+<!-- Tempusdominus Bootstrap 4 -->
+ <!-- Theme style -->
+<link rel="stylesheet" href="/static/dist/css/adminlte.min.css ">
+<link rel="stylesheet"
+  href="/static/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<!-- daterange picker -->
+<link rel="stylesheet" href="/static/plugins/bs-stepper/css/bs-stepper.min.css">
+<link rel="stylesheet" href="/static/plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/static/dist/css/green-audio-player.css ">
+<link rel="stylesheet" href="/static/plugins/jquery-ui/jquery-ui.css" />
+<!-- custom style -->
+<link rel="stylesheet" href="/static/plugins/aos/aos.css ">
+<link rel="stylesheet" href="/static/plugins/dropzone/dropzone.css ">
+<!-- custom style -->
+<link rel="stylesheet" href="/static/dist/css/main.css ">
+<link rel="stylesheet" href="/static/dist/css/responsive.css ">
+<link rel="stylesheet" href="/static/dist/css/TZ_datepicker.css" />
+
+<link rel="icon" type="image/png" sizes="16x16" href="/static/dist/img/favicon-16x16.png">
+  
+</head>
+
+<body class="hold-transition layout-top-nav bg-white">
+  <div class="wrapper">
+    <!-- Navbar -->
+
+    
+    
+
+  
+
+
+<nav class="main-header navbar front-nav  navbar-expand-md nav-black
+flex-column w-100 position-sticky flex align-items-center p-0">
+  
+  <div class="utility_wrap w-100">
+    <div class="portal_menu clearfix">
+      <ul class="utility_menu">
+        <li class="mr-4 d-flex align-items-center">
+          <div><img src="/static/dist/img/icons/admin-user-icon.png" alt="사용자정보 아이콘"></div>
+          <a href="/user" class="">함께하는음악저작인협회</a>
+        </li>
+        
+        <!--
+        2025: 불완정한 기능. 안보이도록 보류 
+          <li class="d-flex align-items-center">
+          <div><img src="/static/dist/img/icons/manager-icon.png" alt="관리모드 아이콘"></div>
+          <a href="/manager" title="관리모드" class='primary-text'>관리모드</a>
+        </li>-->
+        
+
+      </ul>
+    </div>
+  </div>
+  
+  <div class="container h-100 d-flex flex-direction-column jusify-content-unset">
+    <div class="d-flex justify-content-between align-items-center flex1 w-100">
+      <a href="/" title="홈화면 이동" class="navbar-brand flex align-items-center">
+        <img src="/static/dist/img/ci.png" alt="음원-권리정보 통합 서비스 로고" class="brand-image "
+          style="opacity: .8">
+        <h4 class="ml-1">음원-권리정보 통합 서비스</h4>
+      </a>
+      <div class="bottom-header-wrap flex align-items-center h-100">
+        <a class="btn-menu" title="모바일 메뉴 열기">
+          <span class="hide">모바일 메뉴 열기</span>
+        </a>
+        <div class="gnb flex align-items-center h-100">
+          <ul class="gnb-ul position-relative m-0 h-100">
+
+            <li>
+              <a href="/intro" title="사업소개">사업소개</a>
+              <ul class="sub-mn" style="display: none;">
+                <li>
+                  <a href="/intro" title="통합DB소개">통합DB소개</a>
+                </li>
+              </ul>
+            </li>
+            
+              
+              <li>
+                
+                  <a href="/soundtracks" title="음원권리정보">음원권리정보</a>
+                  <ul class="sub-mn">
+                    <li>
+                      <a href="/soundtracks" title="음원권리정보 조회">음원권리조회</a>
+                    </li>
+                    
+                  </ul>
+                
+              </li>
+              
+              
+               <!-- 제작사/유통사/함저협/방송사 회원은 모니터링 정보 볼 수 있음 -->
+              <li>
+                <a href="/productions/cue_list" title="방송모니터링정보">방송모니터링정보</a>
+                <ul class="sub-mn">
+                  <li>
+                    <a href="/productions/cue_list" title="방송모니터링정보 조회">정보조회</a>
+                  </li>
+                  
+                  <li>
+                    <a href="/productions/stat" title="모니터링 통계">모니터링통계</a>
+                  </li>
+                </ul>
+              </li>
+              
+
+              
+            
+            <li>
+              <a href="/notices" title="고객센터">고객센터
+                
+              </a>
+              <ul class="sub-mn">
+                <li>
+                  <a href="/notices" title="공지사항">공지사항</a>
+                </li>
+                <li>
+                  <a href="/requests" title="1:1 문의">1:1 문의
+                    
+                  </a>
+                </li>
+                <li>
+                  <a href="/faq" title="FAQ">자주하는질문</a>
+                </li>
+              </ul>
+            </li>
+
+            
+            <li>
+              <a class="cursor-none" title="내 계정">내계정</a>
+              <ul class="sub-mn">
+                
+                <li>
+                  <a href="/ddex/requests" title="DDEX/RDX 관리">DDEX/RDX 관리</a>
+                </li>
+                
+                <li>
+                  <a href="/user" title="회원정보 수정">정보수정</a>
+                </li>
+                <li>
+                  <a href="/user/recover-pw" title="비밀번호변경">비밀번호변경</a>
+                </li>
+                <li>
+                  <a class="nav-auth-logout cursor-pointer" title="로그아웃">회원 나가기</a>
+                </li>
+              </ul>
+            </li>
+            
+
+
+          </ul>
+        </div>
+        <div class="bottom-header-box">
+        </div>
+
+        <nav class="slideMenu" style="right: -100%;display: none;">
+          <ul>
+            <li class="active">
+              <!-- <a title="전체메뉴">전체메뉴</a> -->
+              <div class="m-gnb">
+                <ul class="dep1">
+                  <li>
+                    <a href="/intro" title="사업소개" class="selsected">사업소개</a>
+                    <ul class="dep2 pl-0">
+                      <li>
+                        <a href="/intro" title="UCI소개">통합DB소개</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a href="/soundtracks" title="UCI조회">음원권리정보</a>
+                    <ul class="dep2 pl-0">
+                      <li>
+                        <a href="/soundtracks" title="음원권리조회">음원권리조회</a>
+                      </li>
+                      
+
+                    </ul>
+                  </li>
+                  
+                <li>
+                  <a href="/productions/cue_list" title="방송모니터링정보">방송모니터링정보</a>
+                  <ul class="sub-mn">
+                    <li>
+                      <a href="/productions/cue_list" title="방송모니터링정보 조회">정보조회</a>
+                    </li>
+                    
+                    <li>
+                      <a href="/productions/stat" title="모니터링 통계">모니터링통계</a>
+                    </li>
+                  </ul>
+                </li>
+                
+                  <li>
+                    <a href="/requests" title="고객센터">고객센터</a>
+                    <ul class="dep2 pl-0">
+                      <li>
+                        <a href="/notices" title="공지사항">공지사항</a>
+                      </li>
+                      <li>
+                        <a href="/requests" title="1:1 문의">1:1 문의</a>
+                      </li>
+                      <li>
+                        <a href="/faq" title="FAQ">자주하는질문</a>
+                      </li>
+                    </ul>
+                  </li>
+                  
+                  <!--li>
+                  2025 : 
+                    <a href="/manager" title="관리모드" class='main-color'>관리모드</a>
+                  <li-->
+                  
+
+                  
+                  <li>
+                    <a class="cursor-none" title="내 계정">내계정</a>
+                    <ul class="dep2 pl-0">
+                      
+                      <li>
+                        <a href="/ddex/requests" title="DDEX/RDX 관리">DDEX/RDX 관리</a>
+                      </li>
+                      
+                      <li>
+                        <a href="/user" title="회원정보 수정">정보수정</a>
+                      </li>
+                      <li>
+                        <a href="/user/recover-pw" title="비밀번호변경">비밀번호변경</a>
+                      </li>
+                      <li>
+                        <a class="nav-auth-logout cursor-pointer" title="로그아웃">회원 나가기</a>
+                      </li>
+                    </ul>
+                  </li>
+                  
+
+
+
+                </ul>
+              </div>
+            </li>
+
+          </ul>
+          <a class="slide-close" title="모바일 메뉴 닫기"><span class="hide">모바일 메뉴 닫기</span></a>
+        </nav>
+        <div class="m-gnb-bg" style="display: none;">&nbsp;</div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+    
+
+
+
+    <div class="content-wrapper pt-4">
+      
+
+<div id="csv-load-overlay" class="hide overlay-wrapper fullscreen-spinner download-spinner">
+  <div class="overlay flex-direction-column">
+    <i class="fas fa-3x fa-loading"></i>
+    <img src="/static/dist/img/loading_copyright.gif" alt="CSV 내려받기 로딩 이미지" />
+    <div>
+      <span>내려받는 중..</span><span class="download_txt"></span>
+    </div>
+  </div>
+</div>
+
+<div class="content-header">
+  <div class="container">
+    <div class="row mb-2">
+      <div class="col-sm-12">
+        <h1 class="m-0">
+          음원권리 조회
+        </h1>
+      </div><!-- /.col -->
+    </div>
+  </div>
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+
+  <div class="container">
+    <div class="row">
+      <div class="">
+        <div class="card card-primary user-music-filter">
+          <div class="card-body pb-0">
+            <div class="">
+
+              <div class="row align-items-baseline">
+                <div class="col-12">
+                  
+
+
+<div class="user-right-information p-3 mb-3">
+  <div class="form-group m-0 ">
+    <h5 class="m-0">
+      함께하는음악저작인협회
+      회원님의 권리
+    </h5>
+    
+    <div class="d-flex flex-wrap">
+      <div class="icheck-primary mr-2">
+        <input id="producer_check"
+          class="form-check-input hide" name="select_right" type="radio" value="LA">
+        <label class="form-check-label" for="producer_check">제작사</label>
+      </div>
+      <div class="icheck-primary mr-2">
+        <input id="distributor_check"
+          class="form-check-input hide" name="select_right" type="radio" value="LI">
+        <label class="form-check-label" for="distributor_check">유통사</label>
+      </div>
+      <div class="icheck-primary mr-2">
+        <input id="trust_check"   checked  
+          class="form-check-input" name="select_right" type="radio" value="TR">
+        <label class="form-check-label" for="trust_check">신탁단체</label>
+      </div>
+      <div class="icheck-primary mr-2">
+        <input id="proxy_check"
+          class="form-check-input hide" name="select_right" type="radio" value="PR">
+        <label class="form-check-label" for="proxy_check">대리중개업</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+                  <div class="form-group pt-2 mb-0" style="display: flex;">
+                    <label class="mr-3">구분</label>
+                    <div class="icheck-primary m-0 mr-3">
+                      <input id="country_all" class="form-check-input" value="all" type="radio" name="country"
+                        checked>
+                      <label for="country_all" class="form-check-label">전체</label>
+                    </div>
+                    <div class="icheck-primary m-0 mr-3">
+                      <input id="country_0" class="form-check-input" value="kor" name="country" type="radio"
+                        >
+                      <label for="country_0" class="form-check-label">국내</label>
+                    </div>
+                    <div class="icheck-primary m-0 mr-3">
+                      <input id="country_1" class="form-check-input" value="foreign" name="country" type="radio"
+                        >
+                      <label for="country_1" class="form-check-label">국외</label>
+                    </div>
+                    
+                    <span> | </span>
+                    <div class="icheck-primary  ml-3 m-0">
+                      <input id="islibrary" class="form-check-input" value="library" name="islibrary" type="checkbox">
+                      <label for="islibrary" class="form-check-label">라이브러리</label>
+                    </div>
+                    
+                  </div>
+
+                  <label for="date-category">날짜 검색</label>
+                  <div class="flex mobile none flex-wrap">
+                    <div class="form-group mr-3">
+                      <div class="col-md-12 mr-3 p-0">
+                        <select class="select2" name="period_type" style="width: 100%;" id="date-category">
+                          <option value="release" selected>발매일</option>
+                          <option value="insertDate">등록일</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2 col-6  form-group mr-3 p-0">
+                      <label class="hide" for="dateType">발매일 검색 기간 선택창</label>
+                      <select class="select2" name="dateType" id="dateType" style="width: 100%;">
+                        <option value="all" selected>전체</option>
+                        <option value="1w">1주</option>
+                        <option value="1m">1개월</option>
+                        <option value="3m">3개월</option>
+                        <option value="6m">6개월</option>
+                        <option value="1y">12개월</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6 form-group p-0">
+                      <div class="flex align-items-center mobile">
+                        <!-- 시작일 -->
+                        <div class="input-group  w-auto">
+                          <span class="dset">
+                            <label class="hide" for="searchStartDate">발매일 시작일</label>
+                            <input type="text" autocomplete="off" class="datepicker inpType" name="searchStartDate"
+                              id="searchStartDate">
+                          </span>
+                          <a href="#none" class="btncalendar dateclick">달력</a>
+
+                        </div>
+                        <div>
+                          <span class="demi">~</span>
+                        </div>
+
+                        <div class="input-group ">
+                          <!-- 종료일 -->
+                          <span class="dset">
+                            <label class="hide" for="searchEndDate">발매일 종료일</label>
+                            <input type="text" autocomplete="off" class="datepicker inpType" name="searchEndDate"
+                              id="searchEndDate">
+                          </span>
+                          <a href="#none" class="btncalendar dateclick">달력</a>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="commercialFilter col-md-6">
+                  <div class="col-md-12 row p-0">
+                    <label class="col-12" for="keyword-category">정보 검색</label>
+                    <div class="col-4 form-group">
+                      <select name="keyword-category" id="keyword-category" class="select2" style="width: 100%;">
+                        <option value="song" selected>곡명</option>
+                        <option value="album">앨범명</option>
+                        <option value="artist">아티스트명</option>
+                        <option value="composer">작곡가명</option>
+                        <option value="writer">작사가명</option>
+                        <option value="arranger">편곡자명</option>
+                      </select>
+                    </div>
+                    <div class="col-8 form-group">
+                      <div class="input-group ">
+                        <label class="col-12 hide" for="keyword-search">정보 입력창</label>
+                        <input type="search" id="keyword-search" name="keyword-search" class="form-control form-control"
+                          placeholder="" value="">
+                      </div>
+                    </div>
+
+
+                    <div class="col-4 form-group">
+                      <label class="col-12 hide" for="keyword-category2">정보2 검색</label>
+                      <select name="keyword-category2" id="keyword-category2" class="select2" style="width: 100%;">
+                        <option value="song" selected>곡명</option>
+                        <option value="album">앨범명</option>
+                        <option value="artist">아티스트명</option>
+                        <option value="composer">작곡가명</option>
+                        <option value="writer">작사가명</option>
+                        <option value="arranger">편곡자명</option>
+                      </select>
+                    </div>
+                    <div class="col-8 form-group">
+                      <div class="input-group input-group">
+                        <label class="col-12 hide" for="keyword-search2">정보 입력창</label>
+                        <input type="search" id="keyword-search2" name="keyword-search2" class="form-control"
+                          placeholder="" value="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div class="libraryFilter hide col-md-6">
+                  <div class="col-md-12 row  p-0">
+                    <label class="col-12" for="keyword-category-lib">정보 검색</label>
+                    <div class="col-4 form-group">
+                      <select name="keyword-category" id="keyword-category-lib" class="select2" style="width: 100%;">
+                        <option value="trackName" selected>곡명</option>
+                        <option value="albumTitle">앨범명</option>
+                        <option value="artistName">실연자</option>
+                        <option value="writer">저작자명</option>
+                      </select>
+                    </div>
+                    <div class="col-8 form-group">
+                      <div class="input-group ">
+                        <label class="col-12 hide" for="keyword-search-lib">정보 입력창</label>
+                        <input type="search" id="keyword-search-lib" name="keyword-search-lib" class="form-control form-control"
+                          placeholder="" value="">
+                      </div>
+                    </div>
+                    <div class="col-4 form-group">
+                      <select name="keyword-category2" id="keyword-category2-lib" class="select2" style="width: 100%;">
+                        <option value="trackName" selected>곡명</option>
+                        <option value="albumTitle">앨범명</option>
+                        <option value="artistName">실연자</option>
+                        <option value="writer">저작자명</option>
+                      </select>
+                    </div>
+                    <div class="col-8 form-group">
+                      <div class="input-group ">
+                        <label class="col-12 hide" for="keyword-search2-lib">정보 입력창</label>
+                        <input type="search" id="keyword-search2-lib" name="keyword-search2-lib"
+                          class="form-control form-control" placeholder="" value="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12 row">
+                  <label class="col-12" for="code-category">코드 검색</label>
+                  <div class="col-4 form-group">
+                    <select name="code-category" id="code-category" class="select2" style="width: 100%;">
+                      <option value="isrc" selected>ISRC</option>
+                      <option value="iswc">ISWC</option>
+                      <option value="uci">UCI</option>
+                      <option value="upc">UPC</option>
+                    </select>
+                  </div>
+                  <div class="col-8 form-group">
+                    <div class="input-group input-group">
+                      <label class="col-12 hide" for="code-search">코드 입력창</label>
+                      <input type="search" id="code-search" name="code-search" class="form-control" placeholder=""
+                        value="">
+                    </div>
+                  </div>
+
+                  <div class="col-12 form-group libraryFilter hide">
+                    <label class="music-filter-title">출판사 검색</label>
+                    <div class="input-group">
+                      <input type="search" name="publisher-search" class="form-control search-input" placeholder=""
+                        value="">
+                    </div>
+                  </div>
+                </div>
+
+                <input name='isUpload' type="hidden" value="0" />
+              </div>
+
+
+            </div>
+            <div class="col-12">
+              <div class="justify-content-center col-3 m-auto">
+                <button id="btn-search-soundtrack" type="button" class="btn btn-block btn-black">검색</button>
+              </div>
+            </div>
+          </div>
+
+          
+          
+          
+
+          <div class="pl-3">
+            <div class="song-search-caption2 position-relative d-flex justify-content-between mb-2 pt-0">
+              <div>
+                <span class="song-total-count">
+                  238304
+                </span><span class="main-color">개</span><span>의 검색 결과가 있습니다. </span>
+              </div>
+
+              
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+        <div id="soundtrack-list" class="">
+
+        </div>
+
+        <ul class="pagination justify-content-center m-3">
+
+          <li>
+          <a title="첫페이지" class="fc-prev-button btn  disabled"  aria-label="prev">
+            <span class="hide">첫 페이지</span>
+            <span class="fa fa-chevron-left"></span>
+            <span class="fa fa-chevron-left"></span>
+          </a>
+          </li>
+
+          <li>
+          <a title="이전 10개 페이지" class="fc-prev-button btn  disabled"  aria-label="prev">
+            <span class="fa fa-chevron-left"></span>
+          </a>
+          </li>
+          
+          <!-- <div class=pagination> -->
+            
+            
+            
+            <li class="page-item active">
+              <a title="현재 페이지" class="page-link cursor-none disabled">1</a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="2 페이지" class="page-link"
+                href="/soundtracks/p/2?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">2
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="3 페이지" class="page-link"
+                href="/soundtracks/p/3?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">3
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="4 페이지" class="page-link"
+                href="/soundtracks/p/4?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">4
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="5 페이지" class="page-link"
+                href="/soundtracks/p/5?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">5
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="6 페이지" class="page-link"
+                href="/soundtracks/p/6?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">6
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="7 페이지" class="page-link"
+                href="/soundtracks/p/7?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">7
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="8 페이지" class="page-link"
+                href="/soundtracks/p/8?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">8
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="9 페이지" class="page-link"
+                href="/soundtracks/p/9?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">9
+              </a>
+            </li>
+            
+            
+            
+            
+            
+            <li class="page-item">
+              <a title="10 페이지" class="page-link"
+                href="/soundtracks/p/10?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release">10
+              </a>
+            </li>
+            
+            
+            
+          <!-- </div> -->
+          
+          <li>
+          <a title="다음 10개 페이지"
+            href="/soundtracks/p/11?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release"
+            class="fc-next-button btn "  aria-label="next">
+            <span class="hide">다음 10개 페이지</span>
+            <span class="fa fa-chevron-right"></span>
+          </a>
+          </li>
+
+          <li>
+          <a title="마지막 페이지"
+            href="/soundtracks/p/11916?country=all&amp;islibrary=0&amp;sr=TR&amp;period_type=release"
+            class="fc-next-button btn"  aria-label="next">
+            <span class="hide">마지막 페이지</span>
+            <span class="fa fa-chevron-right"></span>
+            <span class="fa fa-chevron-right"></span>
+          </a>
+          </li>
+          
+        </ul>
+
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+
+<a title="페이지 위로 이동" id="back-to-top" href="#" class="btn btn-primary back-to-top" role="button" aria-label="페이지 위로 이동">
+  <span class="hide">페이지 위로 이동</span>
+  <i class="fas fa-chevron-up"></i>
+</a>
+
+
+    </div>
+    <!-- /.content-wrapper -->
+    
+    <div id="search-overlay" class="hide overlay-wrapper fullscreen-spinner">
+  <div class="overlay flex-direction-column">
+    <i class="fas fa-3x fa-loading"></i>
+    <img src="/static/dist/img/loading_copyright.gif" alt="로딩 이미지" />
+    <h4 class="text-bold pt-2 color-white">로딩 중</h4>
+  </div>
+</div>
+<div class="modal fade" id="usertype_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">권리수정 안내</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="help-box text-left">
+          <ul class="pl-2 mb-0">
+            <li>
+              <span class="font-weight-bold">
+                권리를 수정하실 경우 <strong>관리자의 승인이 필요</strong>합니다.<br />
+                수정을 진행하면 가입상태가 "승인대기" 상태로 변경됩니다.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal show" id="system_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">작업 안내</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="help-box text-left">
+          <ul class="pl-2 mb-0">
+            <li>
+              <span class="font-weight-bold">
+                긴급 서버 작업으로 인하여 아래 일정동안 서비스가 제한될 예정입니다.<br />
+                빠른 시간 내에 정상 서비스가 가능하도록 진행하겠습니다.<br />
+                양해부탁드립니다.
+              </span>
+
+              <!-- <span class="font-weight-bold">
+                내부 시스템 정비로 인하여 당분간 모니터링 조회가 불가합니다.<br />
+                빠른 시일 내로 복구하겠습니다. 양해부탁드립니다.
+              </span>
+               -->
+            </li>
+            <!-- <br /> -->
+            <li><h6 class="font-weight-bold">점검 일자 : 2025년 4월 3일 목요일, 오후 3시 ~ 6시</h6></li>
+            <li><h6 class="font-weight-bold">점검 내용 : 서버 장비 부품 교체</h6></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-sm btn-outline-primary" name="btn-close-oneday">하루동안 보지않기</button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal show" id="ssp_modal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">이용 안내</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="help-box text-left">
+          <ul class="pl-2 mb-0">
+            <li>
+              <span class="font-weight-bold">
+                2025년 12월부터 TJ미디어의 노래반주기 이용정보 집계표도 제공됩니다.<br />
+                이용에 참고하시기 바랍니다.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-sm btn-outline-primary" name="btn-close-oneday">하루동안 보지않기</button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    <!-- Main Footer -->
+<footer class="main-footer">
+  <div class="container">
+
+
+    <div class="footer-floor1 width-auto clearfix bt-family-site">
+      <div class="footer-floor1-lf">
+        <ul class="clearfix">
+          <li>
+            <a title="개인정보처리방침" class="color-white a-tag"
+              href="https://www.copyright.or.kr/customer-center/user-guide/privacy-policy/index.do">
+              개인정보처리방침
+            </a>
+          </li>
+          <li>
+            <a title="이메일무단수집거부" class="color-white a-tag"
+              href="https://www.copyright.or.kr/customer-center/user-guide/email-rejection/index.do">
+              이메일무단수집거부
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="width-auto footer-floor2 clearfix">
+
+      <div class="flex w-100 justify-content-between row">
+        <div class="flex align-items-baseline row">
+          <div class="footer-logo mt-3 mb-3  mr-3">
+            <img src="/static/dist/img/footer/footer_logo.png"
+              alt="한국저작권위원회 - KOREA COPYRIGHT COMMISSION">
+          </div>
+          <div>
+            <div class="flex mb-2">
+              <div class="text-bold pr-2">진주</div>
+              <div style="font-weight: 100;">
+                [우 52851] 경상남도 진주시 소호로 117(충무공동)<br />
+                <span class="span-block">☎ 대표번호 055.792.0000</span>
+              </div>
+            </div>
+            <div class="flex">
+              <div class="text-bold pr-2">서울</div>
+              <div style="font-weight: 100;">
+                [우 04323] 서울특별시 용산구 후암로 107, 5/16층<br />
+                <span class="span-block">☎ 대표번호 02.2669.0010</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex align-items-baseline row">
+          <div class="footer-logo mt-3 mb-3 mr-3">
+            <img src="/static/dist/img/footer/bromis_logo_w.png"
+              alt="한국저작권위원회 - KOREA COPYRIGHT COMMISSION">
+          </div>
+          <div>
+            <div class="flex mb-3" style="font-weight: 100;">
+              <div>
+                서울특별시 서초구 서초대로34길22, 3층<br />
+              </div>
+            </div>
+            <div class="flex">
+              <div class="pr-2 text-bold">정 : 김용훈</div>
+              <div class="pr-2">
+                02-3471-1095
+              </div>
+              <div>
+                kyh6633@k-mca.or.kr
+              </div>
+            </div>
+            <div class="flex" style="font-weight: 100;">
+              <div class="pr-2 text-bold">부 : 강조명</div>
+              <div class="pr-2">
+                02-6404-1084
+              </div>
+              <div>
+                lamp@k-mca.or.kr
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <!-- <div class="footer-floor2-lf clearfix">
+        <div class=" ">
+          <div class="footer-logo mt-3 mb-3">
+            <img src="/static/dist/img/footer/footer_logo.png"
+              alt="한국저작권위원회 - KOREA COPYRIGHT COMMISSION">
+          </div>
+        </div>
+        <ul class="footer-floor2-ul p-0">
+          <li>
+            <span class="span-block"><strong>진주 </strong>[우 52851] 경상남도 진주시 소호로 117(충무공동) </span>
+            <span class="span-block">☎ 대표번호 055.792.0000</span>
+          </li>
+          <li>
+
+            <span class="span-block"><strong>서울 </strong>[우 04323] 서울특별시 용산구 후암로 107, 5/16층 </span>
+            <span class="span-block">☎ 대표번호 02.2669.0010</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-floor2-lf clearfix">
+        <div class="">
+          <div class="footer-logo">
+            <img src="/static/dist/img/footer/bromis_logo_w.png"
+              alt="방송 사용음악 모니터링 시스템 운영위원회 - BROMIS">
+          </div>
+        </div>
+        <ul class="footer-floor2-ul p-0">
+          <li>
+            <span class="span-block">(06661) 서울특별시 서초구 서초대로34길22, 3층 </span>
+          </li>
+          <li>
+            <span class="span-block">정 : 김용훈 / 02-3471-1095 / kyh6633@k-mca.or.kr</span>
+          </li>
+          <li>
+            <span class="span-block">부 : 강조명 / 02-6404-1084 / lamp@k-mca.or.kr</span>
+          </li>
+        </ul>
+      </div> -->
+
+
+    </div>
+  </div>
+</footer>
+  </div>
+
+
+  <!-- ./wrapper -->
+  
+  <!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script src="/static/plugins/jquery/jquery.min.js "></script>
+<script src="/static/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="/static/plugins/chart.js/Chart.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="/static/plugins/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/dist/js/adminlte.min.js "></script>
+
+<script src="/static/plugins/select2/js/select2.full.min.js"></script>
+<script src="/static/plugins/tagsinput/js/bootstrap-tagsinput.min.js"></script>
+
+<!-- InputMask -->
+<script src="/static/plugins/moment/moment.min.js "></script>
+<script src="/static/plugins/moment/locale/ko.js "></script>
+<script src="/static/plugins/inputmask/jquery.inputmask.min.js "></script>
+<!-- date-range-picker -->
+<script src="/static/plugins/daterangepicker/daterangepicker.js "></script>
+<script src="/static/plugins/daterangepicker/datapicker-ko.js"></script>
+
+
+<script src="/static/plugins/bs-stepper/js/bs-stepper.min.js"></script>
+
+<script src="/static/dist/js/green-audio-player.js"></script>
+<!-- Animate On Scroll(AOS) -->
+<script src="/static/plugins/aos/aos.js "></script>
+
+<script src="/static/plugins/dropzone/dropzone.js "></script>
+
+<!-- Tempusdominus Bootstrap 4 -->
+<script
+  src="/static/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="/static/dist/js/timeline.js "></script>
+<script src="/static/dist/js/api_element.js "></script>
+<script src="/static/dist/js/api_renderer.js "></script>
+<script src="/static/dist/js/common.js "></script>
+<script src="/static/dist/js/main.js "></script>
+  
+
+
+</body>
+
+</html>
