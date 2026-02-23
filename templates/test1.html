@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로그램 비용 분석 대시보드</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #f4f7fc; font-family: 'Noto Sans KR', sans-serif; padding-top: 20px; color: #333; }
+        .dashboard-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        
+        .card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+        .card-header { background-color: white; border-bottom: 1px solid #eee; padding: 15px 20px; border-radius: 12px 12px 0 0 !important; }
+        
+        .table th { background-color: #f8f9fa; vertical-align: middle; text-align: center; font-size: 14px; white-space: nowrap; color: #555; font-weight: 700; }
+        .table td { vertical-align: middle; text-align: center; font-size: 14px; white-space: nowrap; color: #444; }
+        
+        .total-col { background-color: #eef4ff !important; font-weight: bold; color: #0d6efd; }
+        .total-row { background-color: #fff8e1 !important; font-weight: bold; border-top: 2px solid #ffc107; }
+
+        /* 페이징 컨테이너 */
+        #paginationNav { margin-top: 20px; } 
+        .pagination { cursor: pointer; margin-bottom: 0; }
+        
+        #programBadge { font-size: 1.1rem; padding: 8px 15px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-3">
+            <h3 class="fw-bold m-0" id="pageTitle">📊 프로그램별 비용 통합 분석</h3>
+            <span class="badge bg-primary rounded-pill shadow-sm" id="programBadge">
+                📺 Target: 자이언트 펭TV
+            </span>
+        </div>
+        
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary active" id="btnMain" onclick="switchView('main', 1)">1. 통합 비교</button>
+            <button type="button" class="btn btn-outline-secondary" id="btnDetail" onclick="switchView('detail')">2. 상세 분석</button>
+            <button type="button" class="btn btn-outline-dark" id="btnTotal" onclick="switchView('total')">3. 전체 통계</button>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body bg-white rounded">
+            <div class="row g-2 align-items-center">
+                <div class="col-auto"><label class="fw-bold text-secondary">📅 기간</label></div>
+                <div class="col-auto"><select class="form-select form-select-sm"><option>2024년</option></select></div>
+                <div class="col-auto"><select class="form-select form-select-sm"><option>1Q</option></select></div>
+                <div class="col-auto text-secondary">~</div>
+                <div class="col-auto"><select class="form-select form-select-sm"><option>2025년</option></select></div>
+                <div class="col-auto"><select class="form-select form-select-sm"><option>1Q</option></select></div>
+
+                <div class="vr mx-3"></div>
+
+                <div class="col-auto"><label class="fw-bold text-secondary">📡 방송사</label></div>
+                <div class="col-auto">
+                    <select class="form-select form-select-sm" id="broadcasterSelect">
+                        <option value="all">전체</option>
+                        <option value="ebs">EBS</option>
+                        <option value="kbs">KBS</option>
+                        <option value="mbc">MBC</option>
+                    </select>
+                </div>
+                
+                <div class="col-auto ms-2"><label class="fw-bold text-secondary">📺 채널</label></div>
+                <div class="col-auto">
+                    <select class="form-select form-select-sm" id="channelSelect">
+                        <option value="all">전체</option>
+                        <option value="ebs1">EBS 1TV</option>
+                        <option value="ebs2">EBS 2TV</option>
+                    </select>
+                </div>
+
+                <div class="vr mx-3"></div>
+
+                <div class="col-auto"><label class="fw-bold text-secondary">🔍 프로그램</label></div>
+                <div class="col-auto">
+                    <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="검색어 입력" value="기행 (Like 검색)" style="width: 150px;">
+                </div>
+                <div class="col-auto ms-auto">
+                    <button class="btn btn-primary btn-sm px-4 fw-bold">조회</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between">
+            <span class="fw-bold fs-6" id="chartTitle">📈 분기별 총 비용 추세</span>
+        </div>
+        <div class="card-body">
+            <div style="height: 320px;">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span class="fw-bold fs-6" id="gridTitle">📋 상세 데이터 목록</span>
+            <button class="btn btn-success btn-sm">📗 엑셀 다운로드</button>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0" id="dataTable">
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <nav id="paginationNav" class="justify-content-center">
+        <ul class="pagination">
+            <li class="page-item disabled"><a class="page-link" href="#">Prev</a></li>
+            <li class="page-item active" id="page1"><a class="page-link" onclick="switchView('main', 1)">1</a></li>
+            <li class="page-item" id="page2"><a class="page-link" onclick="switchView('main', 2)">2</a></li>            
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
+
+</div>
+
+<script>
+    let myChartInstance = null;
+    const labels = ['2024.1Q', '2024.2Q', '2024.3Q', '2024.4Q', '2025.1Q'];
+
+    // [데이터 1-1] 메인: 1페이지 데이터 (상위권)
+    const dataMainPage1 = [
+        { name: '한국기행', data: [100, 110, 150, 130, 140], color: '#ff6384' },
+        { name: '세계테마기행', data: [80, 85, 90, 85, 95], color: '#36a2eb' },
+        { name: '건축탐구 기행', data: [50, 50, 50, 50, 55], color: '#ffce56' },
+        { name: '아시아 음식 기행', data: [40, 42, 45, 43, 46], color: '#4bc0c0' },
+        { name: '역사 탐방 기행', data: [30, 32, 35, 33, 34], color: '#9966ff' }
+    ];
+
+    // [데이터 1-2] 메인: 2페이지 데이터 (하위권 - 시뮬레이션용)
+    const dataMainPage2 = [
+        { name: '동네 한바퀴 기행', data: [20, 22, 25, 23, 24], color: '#ff9f40' },
+        { name: '기행과 사람들', data: [15, 15, 18, 17, 19], color: '#9966ff' },
+        { name: '숨은 골목 기행', data: [10, 10, 12, 11, 13], color: '#4bc0c0' },
+        { name: '시장 맛집 기행', data: [8, 9, 8, 9, 10], color: '#ffcd56' },
+        { name: '바닷가 기행', data: [5, 5, 5, 5, 6], color: '#36a2eb' }
+    ];
+
+    // [데이터 2] 상세: 단일 프로그램
+    const dataDetail = [
+        { name: '음저협', data: [10, 10, 12, 11, 13], color: '#36a2eb' },
+        { name: '함저협', data: [20, 22, 25, 23, 24], color: '#ffce56' },
+        { name: '비신탁', data: [60, 68, 100, 85, 90], color: '#ff6384' },
+        { name: '알수없음', data: [10, 10, 13, 11, 13], color: '#c9cbcf' }
+    ];
+
+    // [데이터 3] 전체: 합계
+    const dataTotal = [
+        { name: '음저협', data: [500, 550, 600, 580, 650], color: '#36a2eb' },
+        { name: '함저협', data: [1000, 1100, 1200, 1150, 1250], color: '#ffce56' },
+        { name: '비신탁', data: [3000, 3200, 3500, 3400, 3600], color: '#ff6384' },
+        { name: '알수없음', data: [500, 500, 600, 550, 600], color: '#c9cbcf' }
+    ];
+
+    window.onload = function() { switchView('main', 1); };
+
+    function switchView(mode, pageNum) {
+        const searchInput = document.getElementById('searchInput');
+        const badge = document.getElementById('programBadge');
+        const pagination = document.getElementById('paginationNav');
+        const chartTitle = document.getElementById('chartTitle');
+        const gridTitle = document.getElementById('gridTitle');
+        const bSelect = document.getElementById('broadcasterSelect');
+        const cSelect = document.getElementById('channelSelect');
+
+        // 버튼 상태 초기화
+        document.getElementById('btnMain').className = 'btn btn-outline-primary';
+        document.getElementById('btnDetail').className = 'btn btn-outline-secondary';
+        document.getElementById('btnTotal').className = 'btn btn-outline-dark';
+
+        if (myChartInstance) myChartInstance.destroy();
+
+        if (mode === 'main') {
+            // [모드 1: 통합 비교]
+            document.getElementById('btnMain').className += ' active';
+            
+            // UI 설정
+            searchInput.value = '기행'; 
+            searchInput.disabled = false;
+            bSelect.value = 'ebs';
+            cSelect.value = 'ebs1';
+            
+            badge.style.display = 'none';
+            // ★ 페이징 보임!
+            pagination.style.display = 'flex'; 
+            
+            // 페이지별 데이터 로드 시뮬레이션
+            let currentData = dataMainPage1;
+            if (pageNum === 2) currentData = dataMainPage2;            
+
+            // 페이지 버튼 Active 상태 변경
+            document.querySelectorAll('.page-item').forEach(el => el.classList.remove('active'));
+            if(pageNum) document.getElementById('page' + pageNum)?.classList.add('active');
+
+            chartTitle.innerText = `📈 통합 비용 추세 (검색결과: 기행 - ${pageNum}페이지)`;
+            gridTitle.innerText = '📋 프로그램별 비용 목록';
+            
+            renderChart(currentData, '분기별 총 비용 추세');
+            renderTableMain(currentData);
+
+        } else if (mode === 'detail') {
+            // [모드 2: 상세 분석]
+            document.getElementById('btnDetail').className += ' active';
+            searchInput.value = '한국기행';
+            searchInput.disabled = true;
+            
+            badge.style.display = 'block';
+            badge.className = 'badge bg-primary rounded-pill shadow-sm';
+            badge.innerHTML = '📺 Target: 한국기행';
+            
+            // ★ 페이징 숨김!
+            pagination.style.display = 'none';
+            
+            chartTitle.innerText = '📈 상세 비목별 추이 (한국기행)';
+            gridTitle.innerText = '📋 비목별 상세 데이터';
+
+            renderChart(dataDetail, '비목별 비용 추세');
+            renderTableDetail(dataDetail);
+
+        } else if (mode === 'total') {
+            // [모드 3: 전체 통계]
+            document.getElementById('btnTotal').className += ' active';
+            searchInput.value = '';
+            searchInput.disabled = false;
+            bSelect.value = 'all';
+            cSelect.value = 'all';
+
+            badge.style.display = 'block';
+            badge.className = 'badge bg-dark rounded-pill shadow-sm';
+            badge.innerHTML = '📡 Target: 전체 (방송사 합계)';
+            
+            // ★ 페이징 숨김!
+            pagination.style.display = 'none';
+            
+            chartTitle.innerText = '📈 방송사 전체 비목별 추이';
+            gridTitle.innerText = '📋 전체 비목별 데이터 합계';
+
+            renderChart(dataTotal, '전체 비목별 비용 추세');
+            renderTableDetail(dataTotal);
+        }
+    }
+
+    function renderChart(dataset, title) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const datasets = dataset.map(item => ({
+            label: item.name,
+            data: item.data,
+            borderColor: item.color,
+            backgroundColor: item.color,
+            tension: 0.2,
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6
+        }));
+
+        myChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: { labels: labels, datasets: datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                    tooltip: { mode: 'index', intersect: false }
+                },
+                scales: { y: { beginAtZero: true, grid: { borderDash: [2, 2] } } }
+            }
+        });
+    }
+
+    // 메인 테이블
+    function renderTableMain(data) {
+        let html = `
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 25%">프로그램명</th>
+                    ${labels.map(l => `<th>${l}</th>`).join('')}
+                    <th class="total-col">합계</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+        
+        if (data.length === 0) {
+             html += `<tr><td colspan="7" class="text-center py-4">데이터가 없습니다.</td></tr></tbody>`;
+        } else {
+            data.forEach(item => {
+                const total = item.data.reduce((a, b) => a + b, 0);
+                html += `
+                    <tr>
+                        <td class="fw-bold text-start ps-4">${item.name}</td>
+                        ${item.data.map(d => `<td>${d}</td>`).join('')}
+                        <td class="total-col">${total.toLocaleString()}억</td>
+                    </tr>
+                `;
+            });
+            html += `</tbody>`;
+        }
+        document.getElementById('dataTable').innerHTML = html;
+    }
+
+    // 상세/전체 테이블
+    function renderTableDetail(data) {
+        let html = `
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 25%">구분</th>
+                    ${labels.map(l => `<th>${l}</th>`).join('')}
+                    <th class="total-col">합계</th>
+                </tr>
+            </thead>
+            <tbody>
+        `;
+        let colTotals = new Array(labels.length).fill(0);
+        let grandTotal = 0;
+
+        data.forEach(item => {
+            const total = item.data.reduce((a, b) => a + b, 0);
+            grandTotal += total;
+            item.data.forEach((val, i) => colTotals[i] += val);
+            html += `
+                <tr>
+                    <td class="fw-bold text-start ps-4">${item.name}</td>
+                    ${item.data.map(d => `<td>${d}</td>`).join('')}
+                    <td class="total-col">${total.toLocaleString()}억</td>
+                </tr>
+            `;
+        });
+
+        html += `
+            <tr class="total-row">
+                <td class="text-start ps-4">합계</td>
+                ${colTotals.map(t => `<td>${t}</td>`).join('')}
+                <td class="total-col text-primary">${grandTotal.toLocaleString()}억</td>
+            </tr>
+            </tbody>
+        `;
+        document.getElementById('dataTable').innerHTML = html;
+    }
+</script>
+
+</body>
+</html>

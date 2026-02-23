@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>프로그램별 비용 통합 분석 (Bootstrap Ver)</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* [기본 폰트 설정] */
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f8f9fa; }
+
+        /* [커스텀 1] 이퀄라이저 차트 (부트스트랩에 없어서 유지) */
+        .equalizer-wrap {
+            display: flex; align-items: flex-end; justify-content: center; gap: 3px; 
+            height: 30px; width: 120px; margin: 0 auto;
+        }
+        .bar {
+            flex: 1; background-color: #dee2e6; border-radius: 2px 2px 0 0; 
+            transition: height 0.5s;
+        }
+        .bar.max { background-color: #0d6efd; } /* Primary Color */
+        .bar.zero { height: 1px !important; }
+
+        /* [커스텀 2] 상세 패널 애니메이션 */
+        #detail-panel { display: none; border-top: 3px solid #0d6efd; animation: slideDown 0.3s ease-out; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* [커스텀 3] 테이블 관련 디테일 */
+        .table th { background-color: #f8f9fa; font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+        .table td { font-size: 0.95rem; vertical-align: middle; }
+        .active-row { background-color: #e7f1ff !important; border-left: 4px solid #0d6efd; }
+        
+        /* 0값 흐리게 처리 */
+        .text-zero { color: #adb5bd; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-4" style="max-width: 1400px;">
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <div class="row g-3 align-items-center">
+                
+                <div class="col-auto">
+                    <span class="fw-bold me-2">📅 기간</span>
+                </div>
+                <div class="col-auto d-flex gap-2">
+                    <select class="form-select form-select-sm" style="width: 100px;"><option>2024년</option></select>
+                    <select class="form-select form-select-sm" style="width: 70px;"><option>1Q</option></select>
+                    <span class="align-self-center">~</span>
+                    <select class="form-select form-select-sm" style="width: 100px;"><option>2025년</option></select>
+                    <select class="form-select form-select-sm" style="width: 70px;"><option>1Q</option></select>
+                </div>
+
+                <div class="col-auto d-none d-lg-block">
+                    <div class="vr h-100 mx-2"></div>
+                </div>
+
+                <div class="col-auto">
+                    <span class="fw-bold me-2">📺 방송사</span>
+                </div>
+                <div class="col-auto d-flex gap-2">
+                    <select class="form-select form-select-sm" style="width: 110px;"><option>전체</option><option>EBS</option></select>
+                    <select class="form-select form-select-sm" style="width: 140px;"><option>전체 채널</option></select>
+                </div>
+
+                <div class="col-auto d-none d-lg-block">
+                    <div class="vr h-100 mx-2"></div>
+                </div>
+
+                <div class="col">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light fw-bold">🔍 프로그램</span>
+                        <input type="text" class="form-control" placeholder="검색어 입력 (예: 기행)">
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <button class="btn btn-warning text-white fw-bold px-4" onclick="alert('조회!')">조회</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">📋 프로그램별 비용 목록 <small class="text-muted fs-6 fw-normal ms-2">(합계 기준 Top 10)</small></h5>
+            <button class="btn btn-success btn-sm d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                  <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z"/>
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                </svg>
+                엑셀 다운로드
+            </button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover align-middle text-center mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">순위</th>
+                        <th>방송사</th>
+                        <th>채널</th>
+                        <th class="text-start ps-4">프로그램명</th>
+                        <th>24.1Q</th>
+                        <th>24.2Q</th>
+                        <th>24.3Q</th>
+                        <th>24.4Q</th>
+                        <th style="width: 150px;">추이</th>
+                        <th class="bg-light">합계</th>
+                    </tr>
+                </thead>
+                <tbody id="list-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="detail-panel" class="card shadow mt-3">
+        <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-primary">상세분석</span>
+                <span id="detail-title" class="fw-bold fs-5">-</span>
+            </div>
+            <button class="btn btn-outline-secondary btn-sm" onclick="closeDetail()">닫기 ✖</button>
+        </div>
+        <div class="card-body text-center py-5 text-muted">
+            <div class="display-1 mb-3">📊</div>
+            <p class="fs-5">여기에 <strong>[상세 차트]</strong>와 <strong>[비목별 테이블]</strong>이 로드됩니다.</p>
+            <p class="small">(Bootstrap Grid를 활용해 좌측 차트 / 우측 정보로 구성하면 좋습니다)</p>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // [데이터 & 로직은 기존과 100% 동일]
+    const rawData = [
+        { broadcaster: 'MBC', channel: 'MBC TV', name: '무한도전', qData: [500, 480, 600, 720] }, 
+        { broadcaster: 'EBS', channel: 'EBS 1TV', name: '한국기행', qData: [100, 110, 150, 130] },
+        { broadcaster: 'KBS', channel: 'KBS 2TV', name: '1박2일', qData: [200, 0, 0, 250] },
+        { broadcaster: 'SBS', channel: 'SBS TV', name: '런닝맨', qData: [150, 140, 160, 155] },
+        { broadcaster: 'EBS', channel: 'EBS 1TV', name: '세계테마기행', qData: [80, 85, 90, 85] },
+        { broadcaster: 'JTBC', channel: 'JTBC', name: '아는형님', qData: [0, 0, 50, 60] },
+        { broadcaster: 'tvN', channel: 'tvN', name: '유퀴즈', qData: [120, 130, 125, 140] },
+        { broadcaster: 'EBS', channel: 'EBS 2TV', name: '건축탐구 집', qData: [50, 40, 30, 20] },
+        { broadcaster: 'KBS', channel: 'KBS 1TV', name: '전국노래자랑', qData: [90, 90, 90, 90] },
+        { broadcaster: 'MBC', channel: 'MBC TV', name: '나혼자산다', qData: [180, 190, 200, 210] },
+    ];
+
+    const processedData = rawData.map(item => {
+        const sum = item.qData.reduce((a, b) => a + b, 0);
+        return { ...item, sum };
+    }).sort((a, b) => b.sum - a.sum).slice(0, 10);
+
+    const tbody = document.getElementById('list-body');
+    
+    processedData.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.onclick = () => openDetail(item.name, tr);
+        tr.style.cursor = 'pointer'; // 포인터 커서
+
+        const rowMax = Math.max(...item.qData);
+
+        // 데이터 컬럼 (0값 처리: text-zero 클래스 사용)
+        const dataCols = item.qData.map(val => 
+            `<td class="${val === 0 ? 'text-zero' : ''}">${val === 0 ? '-' : val}</td>`
+        ).join('');
+
+        // 이퀄라이저 바
+        const bars = item.qData.map(val => {
+            const height = rowMax === 0 ? 0 : (val / rowMax) * 100;
+            const isMax = (val === rowMax && val > 0) ? 'max' : '';
+            return `<div class="bar ${isMax} ${val === 0 ? 'zero' : ''}" style="height: ${height}%" title="${val}"></div>`;
+        }).join('');
+
+        // 합계 1위 강조 (text-danger)
+        const sumStyle = index === 0 ? 'text-danger fw-bold' : 'fw-bold';
+
+        tr.innerHTML = `
+            <td class="text-muted fw-bold">${index + 1}</td>
+            <td><span class="badge bg-light text-dark border">${item.broadcaster}</span></td>
+            <td class="text-muted small">${item.channel}</td>
+            <td class="text-start ps-4 fw-bold">${item.name}</td>
+            ${dataCols}
+            <td><div class="equalizer-wrap">${bars}</div></td>
+            <td class="${sumStyle} bg-light">${item.sum.toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+        
+    });
+
+    function openDetail(name, row) {
+        // 활성 행 스타일 제거 및 추가
+        document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('active-row'));
+        row.classList.add('active-row');
+        
+        document.getElementById('detail-title').innerText = name;
+        
+        const panel = document.getElementById('detail-panel');
+        panel.style.display = 'block';
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function closeDetail() {
+        document.getElementById('detail-panel').style.display = 'none';
+        document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('active-row'));
+    }
+</script>
+
+</body>
+</html>
